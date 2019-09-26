@@ -46,7 +46,10 @@
             <!-- End of Topbar -->
         @endauth
 
-        @include('backend.inc.msg')
+
+        @unless(Request::is('login') || Request::is('register'))
+            @include('backend.inc.msg')
+        @endunless
 
 
         <!-- Begin Page Content -->

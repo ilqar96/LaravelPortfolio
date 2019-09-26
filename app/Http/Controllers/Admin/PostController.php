@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\PostRequest;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Lang;
+use Intervention\Image\Facades\Image;
 
 class PostController extends Controller
 {
@@ -35,9 +38,39 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PostRequest $postRequest)
     {
-        //
+        if($postRequest->hasFile('image')){
+
+            $imageName = time().'.'.$postRequest->image->getClientOriginalExtension();
+
+            $postRequest->image->move(public_path('uploads/posts/'), $imageName);
+
+//            $image = Image::make(public_path('uploads/posts/' . $imageName))->fit(100,100);
+//            $image->save();
+            $postRequest->image = $imageName;
+        }else{
+            $postRequest->image = 'default.png';
+        }
+
+//        dd('test');
+
+        $post = new Post();
+//        $post->image = $imageName;
+        $post->title = $postRequest->title;
+        $post->user_id = $postRequest->user;
+        $post->catgory_id = $postRequest->category;
+
+        $post->save();
+
+//        Post::create([
+//           'image'=>$imageName,
+//           'title'=>$postRequest->title,
+//        ]);
+
+
+        return back()->with('success',Lang::get('post.created'));
+
     }
 
     /**

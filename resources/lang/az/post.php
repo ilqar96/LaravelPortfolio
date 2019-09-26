@@ -10,8 +10,13 @@ return [
     'name-required'=>'Paylaşım adını girmədiz',
     'name-unique'=>'Paylaşım adı artıq mövcuddur.',
     'post_table'=>'Paylaşımlar cədvəli',
-    'name'=>'Paylaşım adı',
     'add'=>'Paylaşım Əlavə et',
+    'name'=>'Paylaşım adı',
+    'image'=>'Paylaşım şəkli',
+    'title'=>'Paylaşım başlığı',
+    'content'=>'Paylaşım içəriyi',
+    'user'=>'Paylaşım müəllifi',
+    'category'=>'Paylaşım kategoriyası',
 
 ];
 

@@ -72,7 +72,7 @@ class RegisterController extends Controller
             $avatar = $request->file('image');
             $filename = time() . '.' . $avatar->extension();
             $request->file('image')->move(public_path('uploads/profiles'), $filename);
-            $image = Image::make(public_path('uploads\profiles\\' . $filename));
+            $image = Image::make(public_path('uploads\profiles\\' . $filename))->fit(300,300);
             $image->save();
         }else{
             $filename = 'default.png';
