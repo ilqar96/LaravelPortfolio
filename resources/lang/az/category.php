@@ -9,6 +9,9 @@ return [
     'delete'=>'Kategoriyanı silmək istəyirsizsə Sil düyməsinə basın.',
     'name-required'=>'Kategoriya adını girmədiz',
     'name-unique'=>'Kategoriya adı artıq mövcuddur.',
+    'cat_table'=>'Kategoriyalar cədvəli',
+    'name'=>'Kategoriya adı',
+    'add'=>'Kategoriya Əlavə et',
 
 ];
 

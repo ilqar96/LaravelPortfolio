@@ -15,7 +15,7 @@
     <li class="nav-item active">
         <a class="nav-link" href="{{route('admin.dashboard')}}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
+            <span>{{__('general.dashboard')}}</span></a>
     </li>
 
     <!-- Divider -->
@@ -26,7 +26,7 @@
     <li class="nav-item">
         <a class="nav-link" href="{{route('admin.users.index')}}">
             <i class="fas fa-fw fa-user-friends"></i>
-            <span>Users</span></a>
+            <span>{{trans_choice('general.users',20)}}</span></a>
     </li>
     @endcan
 
@@ -34,12 +34,12 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#posts" aria-expanded="true" aria-controls="posts">
             <i class="fas fa-fw fa-cog"></i>
-            <span>Posts</span>
+            <span>{{trans_choice('general.posts',20)}}</span>
         </a>
         <div id="posts" class="collapse" aria-labelledby="posts" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="{{route('admin.posts.index')}}">Posts</a>
-                <a class="collapse-item" href="{{route('admin.categories.index')}}">Categories</a>
+                <a class="collapse-item" href="{{route('admin.posts.index')}}">{{trans_choice('general.posts',20)}}</a>
+                <a class="collapse-item" href="{{route('admin.categories.index')}}">{{trans_choice('general.categories',20)}}</a>
             </div>
         </div>
     </li>
