@@ -86,7 +86,7 @@
                         <td>{{Str::limit($post->content,30,'...')}}</td>
                         <td>{{$post->user->name}}</td>
                         <td>{{$post->category->name}}</td>
-                        <td>{{$post->image}}</td>
+                        <td><img src="{{asset($post->imagePath())}}" style="height: 40px;" alt=""></td>
                         <td>{{$post->created_at}}</td>
                         <td>{{$post->updated_at}}</td>
                         <td class="d-flex justify-content-sm-around">

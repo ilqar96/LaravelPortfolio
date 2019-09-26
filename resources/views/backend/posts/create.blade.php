@@ -54,7 +54,7 @@
                     </div>
                     <div class="form-group">
                         <label for="post-content">{{__('post.content')}}</label>
-                        <textarea  name="content"  id="post-content"  class="form-control"  placeholder="{{__('post.content')}}" cols="30"  rows="10" >{{old('content')}}</textarea>
+                        <textarea  name="post_content"  id="post-content"  class="form-control"  placeholder="{{__('post.content')}}" cols="30"  rows="10" >{{old('post_content')}}</textarea>
                     </div>
                     <div class="form-group">
                        @include('backend.partials.user.user_select')

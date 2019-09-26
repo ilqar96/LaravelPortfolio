@@ -18,7 +18,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::orderBy('created_at','desc')->get();
         return view('backend.posts.index',compact('posts'));
     }
 
@@ -41,36 +41,23 @@ class PostController extends Controller
     public function store(PostRequest $postRequest)
     {
         if($postRequest->hasFile('image')){
-
             $imageName = time().'.'.$postRequest->image->getClientOriginalExtension();
-
             $postRequest->image->move(public_path('uploads/posts/'), $imageName);
-
-//            $image = Image::make(public_path('uploads/posts/' . $imageName))->fit(100,100);
-//            $image->save();
-            $postRequest->image = $imageName;
+            $image = Image::make(public_path('uploads/posts/' . $imageName))->fit(100,100);
+            $image->save();
         }else{
-            $postRequest->image = 'default.png';
+            $imageName= 'default.png';
         }
 
-//        dd('test');
-
         $post = new Post();
-//        $post->image = $imageName;
+        $post->image = $imageName;
         $post->title = $postRequest->title;
+        $post->content = $postRequest->post_content;
         $post->user_id = $postRequest->user;
-        $post->catgory_id = $postRequest->category;
-
+        $post->category_id = $postRequest->category;
         $post->save();
 
-//        Post::create([
-//           'image'=>$imageName,
-//           'title'=>$postRequest->title,
-//        ]);
-
-
         return back()->with('success',Lang::get('post.created'));
-
     }
 
     /**
@@ -115,6 +102,11 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        if(file_exists($post->imagePath()) && $post->image!='default.png' ){
+            unlink($post->publicImagePath());
+        }
+        $post->delete();
+
+        return back()->with('success',Lang::get('post.deleted'));
     }
 }

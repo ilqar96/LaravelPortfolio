@@ -26,7 +26,7 @@ class PostRequest extends FormRequest
     {
         return [
             'title'=>'required|max:255',
-            'content'=>'required|min:5',
+            'post_content'=>'required|min:5',
             'category'=>'required|exists:categories,id',
             'user'=>'required|exists:users,id',
             'image'=>'required|image|mimes:jpeg,bmp,png,jpg|max:1999',
