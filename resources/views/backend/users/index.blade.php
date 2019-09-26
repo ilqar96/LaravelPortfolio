@@ -14,9 +14,21 @@
     <script src="{{asset('backend/vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
 
     <!-- Page level custom scripts -->
-    <script src="{{asset('backend/js/demo/datatables-demo.js')}}"></script>
+    <script>
+        $(document).ready(function() {
+            $('#dataTable').DataTable({
+                "language": {
+                    @if(app()->getLocale()=='az')
+                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Azerbaijan.json",
+                    @else
+                    'url':'//cdn.datatables.net/plug-ins/1.10.19/i18n/English.json',
+                    @endif
 
-
+                }
+            });
+        });
+    </script>
+    
     <script>
         $('.deleteUserBtn').click(function () {
             $userid = $(this).data('userid');

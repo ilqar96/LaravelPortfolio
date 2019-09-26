@@ -12,7 +12,11 @@ return [
     'post_table'=>'Posts table',
     'name'=>'Post Name',
     'add'=>'Post Add',
-
+    'image'=>'Post image',
+    'title'=>'Post title',
+    'content'=>'Post content',
+    'user'=>'Post author',
+    'category'=>'Post category',
 
 ];
 
