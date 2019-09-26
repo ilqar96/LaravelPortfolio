@@ -31,4 +31,13 @@ class Post extends Model
         return $this->belongsTo('App\Models\User');
     }
 
+
+    public function imagePath(){
+        return 'uploads/posts/'.$this->image;
+    }
+
+    public function publicImagePath(){
+        return public_path('uploads/posts/').$this->image;
+    }
+
 }
