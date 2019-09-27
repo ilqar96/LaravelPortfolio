@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Http\Requests\PostRequest;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Intervention\Image\Facades\Image;
 
 class Post extends Model
 {
@@ -23,6 +25,16 @@ class Post extends Model
         'image'=>'default.png',
     ];
 
+    public function getCreatedAtAttribute($attriute)
+    {
+        return date('d-m-Y H:i:s',strtotime($attriute));
+    }
+
+    public function getUpdatedAtAttribute($attriute)
+    {
+        return date('d-m-Y H:i:s',strtotime($attriute));
+    }
+
     public function category(){
         return $this->belongsTo('App\Models\Category');
     }
@@ -38,6 +50,20 @@ class Post extends Model
 
     public function publicImagePath(){
         return public_path('uploads/posts/').$this->image;
+    }
+
+    public static function storeImage(PostRequest $postRequest){
+
+        if($postRequest->hasFile('image')){
+            $imageName = time().'.'.$postRequest->image->getClientOriginalExtension();
+            $postRequest->image->move(public_path('uploads/posts/'), $imageName);
+            $image = Image::make(public_path('uploads/posts/' . $imageName))->fit(100,100);
+            $image->save();
+        }else{
+            $imageName= 'default.png';
+        }
+
+        return $imageName;
     }
 
 }

@@ -7,25 +7,20 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Lang;
-use Intervention\Image\Facades\Image;
 
 class PostController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
-        $posts = Post::orderBy('created_at','desc')->get();
+//        $posts = Post::with(['category','user'])->orderBy('created_at','desc')->get();
         return view('backend.posts.index',compact('posts'));
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create()
     {
@@ -33,29 +28,20 @@ class PostController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param PostRequest $postRequest
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(PostRequest $postRequest)
     {
-        if($postRequest->hasFile('image')){
-            $imageName = time().'.'.$postRequest->image->getClientOriginalExtension();
-            $postRequest->image->move(public_path('uploads/posts/'), $imageName);
-            $image = Image::make(public_path('uploads/posts/' . $imageName))->fit(100,100);
-            $image->save();
-        }else{
-            $imageName= 'default.png';
-        }
+        $imageName =  Post::storeImage($postRequest);
 
-        $post = new Post();
-        $post->image = $imageName;
-        $post->title = $postRequest->title;
-        $post->content = $postRequest->post_content;
-        $post->user_id = $postRequest->user;
-        $post->category_id = $postRequest->category;
-        $post->save();
+        Post::create([
+            'image' => $imageName,
+            'title' => $postRequest->title,
+            'content' => $postRequest->post_content,
+            'user_id' => $postRequest->user,
+            'category_id' => $postRequest->category,
+        ]);
 
         return back()->with('success',Lang::get('post.created'));
     }

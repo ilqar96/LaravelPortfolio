@@ -19,20 +19,50 @@
         $(document).ready(function() {
             $('#dataTable').DataTable({
                 "language": {
-            @if(app()->getLocale()=='az')
-                    "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Azerbaijan.json",
-            @else
-                    'url':'//cdn.datatables.net/plug-ins/1.10.19/i18n/English.json',
-            @endif
+                @if(app()->getLocale()=='az')
+                        "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Azerbaijan.json",
+                @else
+                        'url':'//cdn.datatables.net/plug-ins/1.10.19/i18n/English.json',
+                @endif
+                },
+                pageLength:25,
+                lengthMenu:[
+                    [10,25,50,100,-1],
+                    [10,25,50,100,'All']
+                ],
+                order:[
+                    [5,'desc']
+                ],
+                columnDefs:[
+                    {
+                        targets:['nosort'],
+                        orderable: false,
+                    }
+                ],
+                processing:true,
+                serverSide:true,
+                ajax:{
+                    url: '{{route('post_data_api')}}',
+                    type: 'Post',
+                },
+                columns:[
+                    {data:'post_title'},
+                    {data:'post_content'},
+                    {data:'user_name'},
+                    {data:'category_name'},
+                    {data:'post_image'},
+                    {data:'created_at'},
+                    {data:'updated_at'},
+                    {data:'operations'},
+                ]
 
-                }
             });
         });
     </script>
 
 
     <script>
-        $('.deletePostBtn').click(function () {
+        $('tbody').on('click','.deletePostBtn',function () {
             $postid = $(this).data('postid');
             $route = "{{route('admin.posts.destroy',':postid')}}";
             $route = $route.replace(':postid',$postid);
@@ -61,10 +91,10 @@
                     <th>{{__('general.content')}}</th>
                     <th>{{__('general.author')}}</th>
                     <th>{{trans_choice('general.categories',1)}}</th>
-                    <th>{{__('general.image')}}</th>
+                    <th class="nosort" >{{__('general.image')}}</th>
                     <th>{{__('general.created_at')}}</th>
                     <th>{{__('general.updated_at')}}</th>
-                    <th>{{__('general.operations')}}</th>
+                    <th class="nosort" >{{__('general.operations')}}</th>
                 </tr>
                 </thead>
                 <tfoot>
@@ -80,22 +110,22 @@
                 </tr>
                 </tfoot>
                 <tbody>
-                @foreach($posts as $post)
-                    <tr>
-                        <td>{{Str::limit($post->title,30,'...')}}</td>
-                        <td>{{Str::limit($post->content,30,'...')}}</td>
-                        <td>{{$post->user->name}}</td>
-                        <td>{{$post->category->name}}</td>
-                        <td><img src="{{asset($post->imagePath())}}" style="height: 40px;" alt=""></td>
-                        <td>{{$post->created_at}}</td>
-                        <td>{{$post->updated_at}}</td>
-                        <td class="d-flex justify-content-sm-around">
-                            <a href=""  class="btn btn-primary btn-sm"><i class="fa fa-eye"></i></a>
-                            <a href="{{route('admin.posts.edit',$post->id)}}"  class="btn btn-secondary btn-sm"><i class="fa fa-edit"></i></a>
-                            <a href=""  data-postid="{{$post->id}}" data-toggle="modal" data-target="#deletePostModal" style="width:33px" class="btn btn-danger btn-sm deletePostBtn"><i class="fa fa-trash"></i></a>
-                        </td>
-                    </tr>
-                @endforeach
+{{--                @foreach($posts as $post)--}}
+{{--                    <tr>--}}
+{{--                        <td>{{Str::limit($post->title,30,'...')}}</td>--}}
+{{--                        <td>{{Str::limit($post->content,30,'...')}}</td>--}}
+{{--                        <td>{{$post->user->name}}</td>--}}
+{{--                        <td>{{$post->category->name}}</td>--}}
+{{--                        <td><img src="{{asset($post->imagePath())}}" style="height: 40px;" alt=""></td>--}}
+{{--                        <td>{{$post->created_at}}</td>--}}
+{{--                        <td>{{$post->updated_at}}</td>--}}
+{{--                        <td class="d-flex justify-content-sm-around">--}}
+{{--                            <a href=""  class="btn btn-primary btn-sm"><i class="fa fa-eye"></i></a>--}}
+{{--                            <a href="{{route('admin.posts.edit',$post->id)}}"  class="btn btn-secondary btn-sm"><i class="fa fa-edit"></i></a>--}}
+{{--                            <a href=""  data-postid="{{$post->id}}" data-toggle="modal" data-target="#deletePostModal" style="width:33px" class="btn btn-danger btn-sm deletePostBtn"><i class="fa fa-trash"></i></a>--}}
+{{--                        </td>--}}
+{{--                    </tr>--}}
+{{--                @endforeach--}}
                 </tbody>
             </table>
         </div>

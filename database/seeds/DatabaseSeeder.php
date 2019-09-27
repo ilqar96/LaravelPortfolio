@@ -15,9 +15,9 @@ class DatabaseSeeder extends Seeder
 //        DB::table('users')->truncate();
 //        DB::table('roles')->truncate();
 
-        $this->call(RoleCreateSeeder::class);
-        factory(App\Models\User::class, 10)->create();
-        factory(App\Models\Category::class,20)->create();
-        factory(App\Models\Post::class,20)->create();
+//        $this->call(RoleCreateSeeder::class);
+//        factory(App\Models\User::class, 10)->create();
+//        factory(App\Models\Category::class,20)->create();
+        factory(App\Models\Post::class,1000)->create();
     }
 }
