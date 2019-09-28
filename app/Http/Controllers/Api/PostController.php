@@ -7,10 +7,22 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class PostController extends Controller
 {
     public function datatable(Request $request){
+
+        $request->validate([
+            'order.0.column' => 'required|numeric',
+            'order.0.dir' => [
+                'required',
+                Rule::in(['desc','asc']),
+            ],
+            'start'=>['required','numeric',],
+            'length'=>['required','numeric',],
+            'columns.*.data'=>['required','string',],
+        ]);
 
         $realColumnNames = [
             'post_title'=>'title',
@@ -48,9 +60,11 @@ class PostController extends Controller
 
         // get filtered query count
         $recordsFiltered = $query->count();
+        // get total count of posts
+        $recordsTotal = Post::count();
         // add start and limit and order conditions to query
         $query->offset($request->start)
-            ->limit($request->length)
+            ->limit($request->length!=-1?$request->length:$recordsTotal)
             ->orderBy($realColumnNames[$orderColumnName],$orderDirection);
         // fetch posts from query builder
         $posts = $query->get();
@@ -58,7 +72,7 @@ class PostController extends Controller
         // response which we send with json
         $response =[];
         $response['data']= [] ;
-        $response['recordsTotal'] = Post::count();
+        $response['recordsTotal'] = $recordsTotal;
         $response['recordsFiltered'] =$recordsFiltered;
 
         // add table rows to data array
@@ -69,15 +83,29 @@ class PostController extends Controller
                 'post_content'=> Str::limit($post->content,30,'...'),
                 'user_name'=> $post->user->name,
                 'category_name'=> $post->category->name,
-                'post_image'=> '<img src="'.asset($post->imagePath()).'" style="height: 40px;" alt="">',
+                'post_image'=>asset($post->imagePath()),
                 'created_at'=> $post->created_at,
                 'updated_at'=> $post->updated_at,
-                'operations'=> '
-                        <div class="d-flex justify-content-sm-around">
-                        <a href=""  class="btn btn-primary btn-sm"><i class="fa fa-eye"></i></a>
-                        <a href="'.route('admin.posts.edit',$post->id).'" class="btn btn-secondary btn-sm"><i class="fa fa-edit"></i></a>
-                        <a href=""  data-postid="'.$post->id.'" data-toggle="modal" data-target="#deletePostModal" style="width:33px" class="btn btn-danger btn-sm deletePostBtn"><i class="fa fa-trash"></i></a>
-                        </div>',
+                'actions'=>[
+                    [
+                        'title'=>'show',
+                        'url'=>route('admin.posts.show',$post->id),
+                        'class'=>'btn btn-primary btn-sm',
+                        'fa'=>'fa fa-eye',
+                    ],
+                    [
+                        'title'=>'edit',
+                        'url'=>route('admin.posts.edit',$post->id),
+                        'class'=>'btn btn-secondary btn-sm',
+                        'fa'=>'fa fa-edit',
+                    ],
+                    [
+                        'title'=>'delete',
+                        'url'=>'',
+                        'class'=>'btn btn-danger btn-sm deletePostBtn',
+                        'fa'=>'fa fa-trash',
+                    ],
+                ],
             ];
         }
 

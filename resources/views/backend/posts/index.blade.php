@@ -7,12 +7,28 @@
 @push('css')
     <!-- Custom styles for this page -->
     <link href="{{asset('backend/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
+
+    <style>
+        .top,.bottom{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        tbody > tr > td:last-child{
+            display: flex;
+            justify-content: space-around;
+        }
+    </style>
 @endpush
 
 @push('scripts')
     <!-- Page level plugins -->
-    <script src="{{asset('backend/vendor/datatables/jquery.dataTables.min.js')}}"></script>
-    <script src="{{asset('backend/vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
+{{--    <script src="{{asset('backend/vendor/datatables/jquery.dataTables.min.js')}}"></script>--}}
+{{--    <script src="{{asset('backend/vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>--}}
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/w/bs4/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-flash-1.5.6/b-html5-1.5.6/b-print-1.5.6/datatables.min.js"></script>
 
     <!-- Page level custom scripts -->
     <script>
@@ -37,6 +53,27 @@
                     {
                         targets:['nosort'],
                         orderable: false,
+                    },
+                    {
+                        render: function (data,type,row) {
+                            var html = `<img src="${data}" style="height: 40px;" alt="">`;
+                            return html;
+                        },
+                        targets:4,
+                    },
+                    {
+                        render: function (data,type,row) {
+                            var html= '';
+                            $.each(row.actions, function (key,action) {
+                                if(action.title=='delete'){
+                                    html += `<a href="${action.url}" data-postid="${row.post_id}" data-toggle="modal" data-target="#deletePostModal"  class="${action.class}"><i class="${action.fa}"></i></a>`;
+                                }else{
+                                    html += `<a href="${action.url}" class="${action.class}"><i class="${action.fa}"></i></a>`;
+                                }
+                            })
+                            return html;
+                        },
+                        targets:7,
                     }
                 ],
                 processing:true,
@@ -54,8 +91,11 @@
                     {data:'created_at'},
                     {data:'updated_at'},
                     {data:'operations'},
-                ]
-
+                ],
+                buttons:[
+                  'copy','excel','pdf'
+                ],
+                dom: '<"top"fBl>rt<"bottom"ip><"clear">'
             });
         });
     </script>
