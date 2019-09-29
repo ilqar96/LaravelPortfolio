@@ -54,8 +54,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        $posts = Post::with('category','user')->get();
-        return view('backend.posts.show',compact('posts'));
+        return view('backend.posts.show',compact('post'));
     }
 
     /**
@@ -66,7 +65,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        return view('backend.posts.edit',compact('post'));
     }
 
     /**
@@ -76,9 +75,19 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(PostRequest $postRequest, Post $post)
     {
-        //
+        $imageName =  Post::storeImage($postRequest,$post->image);
+
+        $post->update([
+            'image' => $imageName,
+            'title' => $postRequest->title,
+            'content' => $postRequest->post_content,
+            'user_id' => $postRequest->user,
+            'category_id' => $postRequest->category,
+        ]);
+
+        return redirect()->route('admin.posts.index')->with('success',Lang::get('post.edited'));
     }
 
     /**
@@ -94,6 +103,22 @@ class PostController extends Controller
         }
         $post->delete();
 
-        return back()->with('success',Lang::get('post.deleted'));
+        return redirect()->route('admin.posts.index')->with('success',Lang::get('post.deleted'));
     }
 }
+
+
+// edit and store methods need tags
+//$tagIds = [];
+//
+//foreach ($tags as $tag) {
+//    $tag = trim($tag);
+//    if ($tag == '') {
+//        continue;
+//    }
+//    $fTag = Tag::firstOrCreate( [ 'title' => $tag, 'url' => $tag ] );
+//
+//    $tagIds[] = $fTag->id;
+//}
+//
+//$place->tags()->sync($tagIds);
