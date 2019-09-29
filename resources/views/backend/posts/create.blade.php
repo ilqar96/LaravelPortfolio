@@ -71,10 +71,3 @@
         </div>
     </div>
 @endsection
-
-
-{{--'title',--}}
-{{--'content',--}}
-{{--'image',--}}
-{{--'user_id',--}}
-{{--'category_id',--}}

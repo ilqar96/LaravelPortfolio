@@ -16,7 +16,7 @@ class PostController extends Controller
     public function index()
     {
 //        $posts = Post::with(['category','user'])->orderBy('created_at','desc')->get();
-        return view('backend.posts.index',compact('posts'));
+        return view('backend.posts.index');
     }
 
     /**
@@ -54,7 +54,8 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        $posts = Post::with('category','user')->get();
+        return view('backend.posts.show',compact('posts'));
     }
 
     /**
