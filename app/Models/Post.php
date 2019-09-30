@@ -35,6 +35,10 @@ class Post extends Model
         return date('d-m-Y H:i:s',strtotime($attriute));
     }
 
+    public function tags(){
+        return $this->belongsToMany('App\Models\Tag','tag_post');
+    }
+
     public function category(){
         return $this->belongsTo('App\Models\Category');
     }

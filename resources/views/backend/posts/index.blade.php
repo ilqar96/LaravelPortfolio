@@ -67,9 +67,7 @@
                             $.each(row.actions, function (key,action) {
                                 if(action.title=='delete'){
                                     html += `<a href="${action.url}" data-postid="${row.post_id}" data-toggle="modal" data-target="#deletePostModal"  class="${action.class}"><i class="${action.fa}"></i></a>`;
-                                }else if(action.title=='edit'){
-                                    html += `<a href="${action.url}" class="${action.class}"><i class="${action.fa}"></i></a>`;
-                                }else if(action.title=='show'){
+                                }else{
                                     html += `<a href="${action.url}" class="${action.class}"><i class="${action.fa}"></i></a>`;
                                 }
                             })

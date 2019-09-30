@@ -20,6 +20,11 @@
         $('#post-user').select2({
             placeholder: "Choose user...",
         });
+
+        $('#post-tag').select2({
+            tags:true,
+            tokenSeparators: [',', ' ']
+        })
     </script>
 
 
@@ -65,6 +70,15 @@
                         @include('backend.partials.category.category_select')
                     </div>
                     @csrf
+
+                    <div class="form-group">
+                        @include('backend.partials.tag.tag_select')
+                    </div>
+
+
+
+
+
                     <button type="submit" class="btn btn-primary w-100">{{__('general.add')}}</button>
                 </form>
             </div>

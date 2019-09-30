@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Category;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -33,6 +34,10 @@ class ViewServiceProvider extends ServiceProvider
 
         View::composer('backend/partials/user/*', function ($view) {
             $view->with('users',User::orderBy('name')->get());
+        });
+
+        View::composer('backend/partials/tag/*', function ($view) {
+            $view->with('tags',Tag::orderBy('name')->get());
         });
     }
 }

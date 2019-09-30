@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
 use App\Http\Controllers\Controller;
+use App\Models\Tag;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 
@@ -36,13 +37,27 @@ class PostController extends Controller
     {
         $imageName =  Post::storeImage($postRequest);
 
-        Post::create([
+        $post = Post::create([
             'image' => $imageName,
             'title' => $postRequest->title,
             'content' => $postRequest->post_content,
             'user_id' => $postRequest->user ?? Auth::user()->id,
             'category_id' => $postRequest->category,
         ]);
+
+
+        $tags = $postRequest->tags;
+        $tagIds = [];
+        foreach ($tags as $tag) {
+            $tag = strtolower(trim($tag));
+            if ($tag == '') {
+                continue;
+            }
+            $fTag = Tag::firstOrCreate( [ 'name' => $tag ] );
+
+            $tagIds[] = $fTag->id;
+        }
+        $post->tags()->sync($tagIds);
 
         return back()->with('success',Lang::get('post.created'));
     }

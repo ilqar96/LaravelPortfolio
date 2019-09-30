@@ -86,6 +86,14 @@ class PostTableController extends Controller
         foreach ($posts as $post ){
 
             $action = [];
+            if(Auth::user()->can('view',$post)){
+                $action[] =  [
+                    'title'=>'show',
+                    'url'=>route('admin.posts.show',$post->id),
+                    'class'=>'btn btn-primary btn-sm',
+                    'fa'=>'fa fa-eye',
+                ];
+            }
             if(Auth::user()->can('update',$post)){
                 $action[] = [
                     'title'=>'edit',
@@ -102,14 +110,7 @@ class PostTableController extends Controller
                     'fa'=>'fa fa-trash',
                 ];
             }
-            if(Auth::user()->can('view',$post)){
-                $action[] =  [
-                    'title'=>'show',
-                    'url'=>route('admin.posts.show',$post->id),
-                    'class'=>'btn btn-primary btn-sm',
-                    'fa'=>'fa fa-eye',
-                ];
-            }
+
 
 
             $response['data'][]= [

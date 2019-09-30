@@ -17,6 +17,7 @@ return [
     'content'=>'Post content',
     'user'=>'Post author',
     'category'=>'Post category',
+    'tag'=>'Post tags',
 
 ];
 
