@@ -10,7 +10,7 @@ Route::group(['namespace'=>'User','as'=>'home.'],function (){
     Route::get('/resume', 'HomeController@resume')->name('resume');
     Route::get('/contact', 'HomeController@contact')->name('contact');
     Route::get('/blog', 'HomeController@blog')->name('blog');
-    Route::get('/blog/{slug}', 'HomeController@singleBlog')->name('single_blog')->where('slug','[A-Za-z0-9]+');;
+    Route::get('/blog/{id}-{slug}', 'HomeController@singleBlog')->name('single_blog')->where('slug','[A-Za-z0-9]+');
 
 });
 

@@ -54,10 +54,12 @@
                     @endforeach
                 </p>
 
-                <div class="d-flex justify-content-between">
-                    <a href=""  data-postid="{{$post->id}}" data-toggle="modal" data-target="#deletePostModal" class="btn btn-danger btn-lg" id="deletePostBtn">Delete</a>
-                    <a class="btn btn-secondary btn-lg" href="{{route('admin.posts.edit',$post->id)}}">Edit</a>
-                </div>
+                @can('delete',$post)
+                    <div class="d-flex justify-content-between">
+                        <a href=""  data-postid="{{$post->id}}" data-toggle="modal" data-target="#deletePostModal" class="btn btn-danger btn-lg" id="deletePostBtn">Delete</a>
+                        <a class="btn btn-secondary btn-lg" href="{{route('admin.posts.edit',$post->id)}}">Edit</a>
+                    </div>
+                @endcan
 
             </div>
         </div>
