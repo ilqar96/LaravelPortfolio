@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Post;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 
 class PostRequest extends FormRequest
@@ -14,7 +17,11 @@ class PostRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if(Request::isMethod('PUT')){
+           return Auth::user()->can('update',$this->route('post'));
+        }else{
+            return Auth::user()->can('create',Post::class);
+        }
     }
 
     /**
@@ -28,7 +35,7 @@ class PostRequest extends FormRequest
             'title'=>'required|max:255',
             'post_content'=>'required|min:5',
             'category'=>'required|exists:categories,id',
-            'user'=>'required|exists:users,id',
+//            'user'=>'required|exists:users,id',
             'image'=>'required_without:post_id|image|mimes:jpeg,bmp,png,jpg|max:1999',
         ];
     }

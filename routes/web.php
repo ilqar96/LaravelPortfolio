@@ -28,7 +28,8 @@ Route::group(['middleware'=>['admin'],'prefix'=>'admin','as'=>'admin.','namespac
     Route::resource('posts','PostController');
     Route::resource('categories','CategoryController');
 
-
+    // get posts for datatable request
+    Route::post('/post-data','PostTableController')->name('post_data');
 });
 
 

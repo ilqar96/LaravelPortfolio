@@ -56,9 +56,11 @@
                         <label for="post-content">{{__('post.content')}}</label>
                         <textarea  name="post_content"  id="post-content"  class="form-control"  placeholder="{{__('post.content')}}" cols="30"  rows="10" >{{old('post_content')}}</textarea>
                     </div>
+                    @if(Auth::user()->isSuperAdmin())
                     <div class="form-group">
                        @include('backend.partials.user.user_select')
                     </div>
+                    @endif
                     <div class="form-group">
                         @include('backend.partials.category.category_select')
                     </div>

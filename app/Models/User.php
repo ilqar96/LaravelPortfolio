@@ -60,11 +60,11 @@ class User extends Authenticatable
     }
 
     public function isSuperAdmin(){
-        return $this->role->id == 4;
+        return $this->role->id == 1;
     }
 
     public function isAdmin(){
-        return $this->role->id != 3;
+        return $this->role->id != 5;
     }
 
     public function scopeAllWithoutMe($query){

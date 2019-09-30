@@ -16,11 +16,10 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if(!Auth::guest() && Auth::user()->role->id!=3){
+        if(!Auth::guest() && Auth::user()->role->id!=5){
                 return $next($request);
         }else{
             return redirect()->route('home.index');
         }
-
     }
 }

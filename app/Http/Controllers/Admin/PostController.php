@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 
 class PostController extends Controller
@@ -24,6 +24,7 @@ class PostController extends Controller
      */
     public function create()
     {
+        $this->authorize('create',Post::class);
         return view('backend.posts.create');
     }
 
@@ -39,7 +40,7 @@ class PostController extends Controller
             'image' => $imageName,
             'title' => $postRequest->title,
             'content' => $postRequest->post_content,
-            'user_id' => $postRequest->user,
+            'user_id' => $postRequest->user ?? Auth::user()->id,
             'category_id' => $postRequest->category,
         ]);
 
@@ -65,6 +66,8 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        $this->authorize('update',$post);
+
         return view('backend.posts.edit',compact('post'));
     }
 
@@ -98,6 +101,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        $this->authorize('delete',$post);
+
         if(file_exists($post->imagePath()) && $post->image!='default.png' ){
             unlink($post->publicImagePath());
         }

@@ -19,8 +19,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 Route::get('/test',function (){
-    return 'ret';
+
 });
-
-
-Route::post('/post-data','Api\PostController@datatable')->name('post_data_api');

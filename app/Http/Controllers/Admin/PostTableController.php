@@ -1,17 +1,24 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
-class PostController extends Controller
+class PostTableController extends Controller
 {
-    public function datatable(Request $request){
+    /**
+     * Handle the incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function __invoke(Request $request)
+    {
 
         $request->validate([
             'order.0.column' => 'required|numeric',
@@ -77,6 +84,34 @@ class PostController extends Controller
 
         // add table rows to data array
         foreach ($posts as $post ){
+
+            $action = [];
+            if(Auth::user()->can('update',$post)){
+                $action[] = [
+                    'title'=>'edit',
+                    'url'=>route('admin.posts.edit',$post->id),
+                    'class'=>'btn btn-secondary btn-sm',
+                    'fa'=>'fa fa-edit',
+                ];
+            }
+            if(Auth::user()->can('delete',$post)){
+                $action[] = [
+                    'title'=>'delete',
+                    'url'=>'',
+                    'class'=>'btn btn-danger btn-sm deletePostBtn',
+                    'fa'=>'fa fa-trash',
+                ];
+            }
+            if(Auth::user()->can('view',$post)){
+                $action[] =  [
+                    'title'=>'show',
+                    'url'=>route('admin.posts.show',$post->id),
+                    'class'=>'btn btn-primary btn-sm',
+                    'fa'=>'fa fa-eye',
+                ];
+            }
+
+
             $response['data'][]= [
                 'post_id'=>$post->id,
                 'post_title'=> Str::limit($post->title,30,'...'),
@@ -86,30 +121,11 @@ class PostController extends Controller
                 'post_image'=>asset($post->imagePath()),
                 'created_at'=> $post->created_at,
                 'updated_at'=> $post->updated_at,
-                'actions'=>[
-                    [
-                        'title'=>'show',
-                        'url'=>route('admin.posts.show',$post->id),
-                        'class'=>'btn btn-primary btn-sm',
-                        'fa'=>'fa fa-eye',
-                    ],
-                    [
-                        'title'=>'edit',
-                        'url'=>route('admin.posts.edit',$post->id),
-                        'class'=>'btn btn-secondary btn-sm',
-                        'fa'=>'fa fa-edit',
-                    ],
-                    [
-                        'title'=>'delete',
-                        'url'=>'',
-                        'class'=>'btn btn-danger btn-sm deletePostBtn',
-                        'fa'=>'fa fa-trash',
-                    ],
-                ],
+                'actions'=>$action,
             ];
         }
 
         return response()->json($response);
+
     }
 }
-

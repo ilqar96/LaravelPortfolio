@@ -4,6 +4,8 @@
         <option value="{{$user->id}}"
             @if(isset($post))
                 {{$post->user->id == $user->id ? 'selected':''}}
+            @else
+                {{Auth::user()->id == $user->id ? 'selected':'' }}
             @endif
         >{{$user->name}}</option>
     @endforeach

@@ -67,7 +67,9 @@
                             $.each(row.actions, function (key,action) {
                                 if(action.title=='delete'){
                                     html += `<a href="${action.url}" data-postid="${row.post_id}" data-toggle="modal" data-target="#deletePostModal"  class="${action.class}"><i class="${action.fa}"></i></a>`;
-                                }else{
+                                }else if(action.title=='edit'){
+                                    html += `<a href="${action.url}" class="${action.class}"><i class="${action.fa}"></i></a>`;
+                                }else if(action.title=='show'){
                                     html += `<a href="${action.url}" class="${action.class}"><i class="${action.fa}"></i></a>`;
                                 }
                             })
@@ -79,7 +81,10 @@
                 processing:true,
                 serverSide:true,
                 ajax:{
-                    url: '{{route('post_data_api')}}',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '{{route('admin.post_data')}}',
                     type: 'Post',
                 },
                 columns:[
