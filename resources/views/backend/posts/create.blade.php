@@ -46,7 +46,7 @@
                 <form method="POST" action="{{route('admin.posts.store')}}" enctype="multipart/form-data" >
                     <div class="form-group">
                         <label for="post-image">{{__('post.image')}}</label>
-                        <input type="file" name="image" value="{{old('image')}}" class="form-control" id="post-image"  placeholder="{{__('post.image')}}">
+                        <input type="file" name="image"  class="form-control" id="post-image"  placeholder="{{__('post.image')}}">
                     </div>
                     <div class="form-group">
                         <label for="post-title">{{__('post.title')}}</label>

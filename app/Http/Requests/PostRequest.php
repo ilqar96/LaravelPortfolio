@@ -29,7 +29,7 @@ class PostRequest extends FormRequest
             'post_content'=>'required|min:5',
             'category'=>'required|exists:categories,id',
             'user'=>'required|exists:users,id',
-            'image'=>'required|image|mimes:jpeg,bmp,png,jpg|max:1999',
+            'image'=>'required_without:post_id|image|mimes:jpeg,bmp,png,jpg|max:1999',
         ];
     }
 

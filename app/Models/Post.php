@@ -52,7 +52,7 @@ class Post extends Model
         return public_path('uploads/posts/').$this->image;
     }
 
-    public static function storeImage(PostRequest $postRequest){
+    public static function storeImage(PostRequest $postRequest ,$image_name='default.png'){
 
         if($postRequest->hasFile('image')){
             $imageName = time().'.'.$postRequest->image->getClientOriginalExtension();
@@ -60,7 +60,7 @@ class Post extends Model
             $image = Image::make(public_path('uploads/posts/' . $imageName))->fit(100,100);
             $image->save();
         }else{
-            $imageName= 'default.png';
+            $imageName= $image_name;
         }
 
         return $imageName;
