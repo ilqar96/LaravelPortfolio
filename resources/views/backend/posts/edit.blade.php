@@ -20,6 +20,11 @@
         $('#post-user').select2({
             placeholder: "Choose user...",
         });
+
+        $('#post-tag').select2({
+            tags:true,
+            tokenSeparators: [',', ' ']
+        })
     </script>
 
 
@@ -59,12 +64,18 @@
                         <label for="post-content">{{__('post.content')}}</label>
                         <textarea  name="post_content"  id="post-content"  class="form-control"  placeholder="{{__('post.content')}}" cols="30"  rows="10" >{{$post->content}}</textarea>
                     </div>
-                    <div class="form-group">
-                        @include('backend.partials.user.user_select')
-                    </div>
+                    @if(Auth::user()->isSuperAdmin())
+                        <div class="form-group">
+                            @include('backend.partials.user.user_select')
+                        </div>
+                    @endif
                     <div class="form-group">
                         @include('backend.partials.category.category_select')
                     </div>
+                    <div class="form-group">
+                        @include('backend.partials.tag.tag_select')
+                    </div>
+
                     <input hidden type="text" name="post_id" value="{{$post->id}}">
                     @csrf
                     @method('PUT')
