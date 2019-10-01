@@ -66,6 +66,14 @@ class Post extends Model
         return url('/blog/'.$this->id.'-'.Str::slug($this->title));
     }
 
+    public function tagIdArray(){
+        $tagIdArray = [];
+        foreach ($this->tags as $tag){
+            $tagIdArray[] =  $tag->id;
+        }
+        return $tagIdArray;
+    }
+
     public static function storeImage(PostRequest $postRequest ,$image_name='default.png'){
 
         if($postRequest->hasFile('image')){

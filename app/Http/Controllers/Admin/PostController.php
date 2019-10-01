@@ -45,19 +45,7 @@ class PostController extends Controller
             'category_id' => $postRequest->category,
         ]);
 
-
-        $tags = $postRequest->tags;
-        $tagIds = [];
-        foreach ($tags as $tag) {
-            $tag = strtolower(trim($tag));
-            if ($tag == '') {
-                continue;
-            }
-            $fTag = Tag::firstOrCreate( [ 'name' => $tag ] );
-
-            $tagIds[] = $fTag->id;
-        }
-        $post->tags()->sync($tagIds);
+        $this->addTagsToPost($postRequest->tags,$post);
 
         return back()->with('success',Lang::get('post.created'));
     }
@@ -82,8 +70,8 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $this->authorize('update',$post);
-
-        return view('backend.posts.edit',compact('post'));
+        $tagIdArray = $post->tagIdArray();
+        return view('backend.posts.edit',compact('post'))->with(['post'=>$post,'tagIdArray'=>$tagIdArray]);
     }
 
     /**
@@ -101,9 +89,11 @@ class PostController extends Controller
             'image' => $imageName,
             'title' => $postRequest->title,
             'content' => $postRequest->post_content,
-            'user_id' => $postRequest->user,
+            'user_id' => $postRequest->user ?? Auth::user()->id,
             'category_id' => $postRequest->category,
         ]);
+
+        $this->addTagsToPost($postRequest->tags,$post);
 
         return redirect()->route('admin.posts.index')->with('success',Lang::get('post.edited'));
     }
@@ -125,20 +115,24 @@ class PostController extends Controller
 
         return redirect()->route('admin.posts.index')->with('success',Lang::get('post.deleted'));
     }
+
+
+    /**
+     * @param array $tags
+     * @param Post $post
+     */
+    private function addTagsToPost(Array $tags,Post $post){
+        $tagIds = [];
+        foreach ($tags as $tag) {
+            $tag = strtolower(trim($tag));
+            if ($tag == '') {
+                continue;
+            }
+            $fTag = Tag::firstOrCreate( [ 'name' => $tag ] );
+
+            $tagIds[] = $fTag->id;
+        }
+        $post->tags()->sync($tagIds);
+    }
 }
 
-
-// edit and store methods need tags
-//$tagIds = [];
-//
-//foreach ($tags as $tag) {
-//    $tag = trim($tag);
-//    if ($tag == '') {
-//        continue;
-//    }
-//    $fTag = Tag::firstOrCreate( [ 'title' => $tag, 'url' => $tag ] );
-//
-//    $tagIds[] = $fTag->id;
-//}
-//
-//$place->tags()->sync($tagIds);
