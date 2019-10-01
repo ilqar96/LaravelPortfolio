@@ -17,6 +17,7 @@ return [
     'content'=>'Paylaşım içəriyi',
     'user'=>'Paylaşım müəllifi',
     'category'=>'Paylaşım kategoriyası',
+    'tag'=>'Paylaşım teqləri',
 
 ];
 

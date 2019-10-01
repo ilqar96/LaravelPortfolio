@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Post;
 
 class HomeController extends Controller
 {
@@ -44,13 +45,15 @@ class HomeController extends Controller
 
     public function blog()
     {
-        return view('frontend.pages.blog');
+        $posts = Post::with('user','category')->orderBy('created_at','desc')->paginate(6);
+        return view('frontend.pages.blog',compact('posts'));
     }
 
 
-    public function singleBlog()
+    public function singleBlog($id)
     {
-        return view('frontend.pages.single_blog');
+        $post = Post::findOrFail($id);
+        return view('frontend.pages.single_blog',compact('post'));
     }
 
 

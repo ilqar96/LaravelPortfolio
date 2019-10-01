@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Http\Requests\PostRequest;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 
 class Post extends Model
@@ -25,14 +26,23 @@ class Post extends Model
         'image'=>'default.png',
     ];
 
-    public function getCreatedAtAttribute($attriute)
+    public function getRouteKeyName()
     {
-        return date('d-m-Y H:i:s',strtotime($attriute));
+        return 'id';
     }
+
+//    public function getCreatedAtAttribute($attriute)
+//    {
+//        return date('d-m-Y H:i:s',strtotime($attriute));
+//    }
 
     public function getUpdatedAtAttribute($attriute)
     {
         return date('d-m-Y H:i:s',strtotime($attriute));
+    }
+
+    public function tags(){
+        return $this->belongsToMany('App\Models\Tag','tag_post');
     }
 
     public function category(){
@@ -50,6 +60,10 @@ class Post extends Model
 
     public function publicImagePath(){
         return public_path('uploads/posts/').$this->image;
+    }
+
+    public function path(){
+        return url('/blog/'.$this->id.'-'.Str::slug($this->title));
     }
 
     public static function storeImage(PostRequest $postRequest ,$image_name='default.png'){
