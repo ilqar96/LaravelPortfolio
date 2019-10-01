@@ -42,7 +42,7 @@
 
                     <div class="about-author d-flex pt-5">
                         <div class="bio align-self-md-center mr-4">
-                            <img src="images/person_1.jpg" alt="Image placeholder" class="img-fluid mb-4">
+                            <img src="images/person_1.jpg" alt="img" class="img-fluid mb-4">
                         </div>
                         <div class="desc align-self-md-center">
                             <h3>About The Author</h3>
@@ -54,84 +54,27 @@
                     <div class="pt-5 mt-5">
                         <h3 class="mb-5">6 Comments</h3>
                         <ul class="comment-list">
-                            <li class="comment">
-                                <div class="vcard bio">
-                                    <img src="images/person_1.jpg" alt="Image placeholder">
-                                </div>
-                                <div class="comment-body">
-                                    <h3>Jean Doe</h3>
-                                    <div class="meta">July 27, 2018 at 2:21pm</div>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                                    <p><a href="#" class="reply">Reply</a></p>
-                                </div>
-                            </li>
 
-                            <li class="comment">
-                                <div class="vcard bio">
-                                    <img src="images/person_1.jpg" alt="Image placeholder">
-                                </div>
-                                <div class="comment-body">
-                                    <h3>Jean Doe</h3>
-                                    <div class="meta">July 27, 2018 at 2:21pm</div>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                                    <p><a href="#" class="reply">Reply</a></p>
-                                </div>
+                            @foreach ($comments as $comment)
+                                <li class="comment">
+                                    <div class="vcard bio">
+                                        <img src="images/person_1.jpg" alt="img">
+                                    </div>
+                                    <div class="comment-body">
+                                        <h3>Jean Doe</h3>
+                                        <div class="meta">July 27, 2018 at 2:21pm</div>
+                                        <p>{{ $comment->content }}</p>
+                                        <p><a href="#" class="reply">Reply</a></p>
+                                    </div>
 
-                                <ul class="children">
-                                    <li class="comment">
-                                        <div class="vcard bio">
-                                            <img src="images/person_1.jpg" alt="Image placeholder">
-                                        </div>
-                                        <div class="comment-body">
-                                            <h3>Jean Doe</h3>
-                                            <div class="meta">July 27, 2018 at 2:21pm</div>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                                            <p><a href="#" class="reply">Reply</a></p>
-                                        </div>
+                                    <ul class="children">
+                                        @foreach ($comment->childrenComments as $childComment)
+                                            @include('frontend.partials.comment.child_comment', ['child_comment' => $childComment])
+                                        @endforeach
+                                    </ul>
 
-
-                                        <ul class="children">
-                                            <li class="comment">
-                                                <div class="vcard bio">
-                                                    <img src="images/person_1.jpg" alt="Image placeholder">
-                                                </div>
-                                                <div class="comment-body">
-                                                    <h3>Jean Doe</h3>
-                                                    <div class="meta">July 27, 2018 at 2:21pm</div>
-                                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                                                    <p><a href="#" class="reply">Reply</a></p>
-                                                </div>
-
-                                                <ul class="children">
-                                                    <li class="comment">
-                                                        <div class="vcard bio">
-                                                            <img src="images/person_1.jpg" alt="Image placeholder">
-                                                        </div>
-                                                        <div class="comment-body">
-                                                            <h3>Jean Doe</h3>
-                                                            <div class="meta">July 27, 2018 at 2:21pm</div>
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                                                            <p><a href="#" class="reply">Reply</a></p>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <li class="comment">
-                                <div class="vcard bio">
-                                    <img src="images/person_1.jpg" alt="Image placeholder">
-                                </div>
-                                <div class="comment-body">
-                                    <h3>Jean Doe</h3>
-                                    <div class="meta">July 27, 2018 at 2:21pm</div>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur quidem laborum necessitatibus, ipsam impedit vitae autem, eum officia, fugiat saepe enim sapiente iste iure! Quam voluptas earum impedit necessitatibus, nihil?</p>
-                                    <p><a href="#" class="reply">Reply</a></p>
-                                </div>
-                            </li>
+                                </li>
+                            @endforeach
                         </ul>
                         <!-- END comment-list -->
 

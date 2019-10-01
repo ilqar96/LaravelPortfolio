@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Comment;
 use App\Models\Post;
 
 class HomeController extends Controller
@@ -52,8 +53,11 @@ class HomeController extends Controller
 
     public function singleBlog($id)
     {
+        $comments = Comment::whereNull('comment_id')
+            ->with('childrenComments')
+            ->get();
         $post = Post::findOrFail($id);
-        return view('frontend.pages.single_blog',compact('post'));
+        return view('frontend.pages.single_blog',compact('post'))->with(['post'=>$post,'comments'=>$comments]);
     }
 
 
